@@ -1,0 +1,45 @@
+.main {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+  width: 90%;
+  height: 90%;
+  margin: auto;
+
+  background-color;
+}
+
+.main .header {
+  display: grid;
+  background-color: chartreuse;
+}
+
+/* .main .header .userInfo {
+  
+}
+
+.main .header .userMoney .moneyChar {
+  
+} */
+
+.main .header .userInfo .userPic img {
+  width: 50px;
+  height: 50px;
+}
+
+.main .data {
+    background-color: cyan;
+  height: 90%;
+  margin: auto;
+  margin-top: 1%;
+width: 100%;
+}
+
+.main .data .infoSheets {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: repeat(5, 20%);
+    border: 0px;
+    margin: auto;
+    text-align: center;
+}
+
