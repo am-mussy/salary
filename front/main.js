@@ -2,7 +2,7 @@ let url = 'http://127.0.0.1:5005/'
 let userName
 let userAccess
 
-const accountURL = 'http://127.0.0.1:5500/front/account.html'
+const accountURL = './account/account.html'
 
 document.getElementById('okBut').addEventListener('click', async () => { await auth(url) })
 

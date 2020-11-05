@@ -17,14 +17,25 @@
                     <p class="moneyChar"> $</p>
                 </div>
                 <div class="userPic">
-                    <img src="/account/img/icon-avatar-16.jpg" alt="User Avatar">
+                    <img src="../account/img/icon-avatar-16.jpg" alt="User Avatar">
                 </div>
             </div>     
         </div>
         <div class="data">
             <div class="filter"></div>
             <div class="input"></div>
-            <div class="infoSheets">
+            <div class="infoSheetsHeaders">
+                <p>DATE</p>
+                <p>TIME</p>
+                <p>COMMENTS</p>
+            </div>
+            <div class="input">
+                <input type="date">
+                <input type="text" placeholder="time" >
+                <input type="text" placeholder="comment">
+                <button>+</button>
+            </div>
+            <div class="infoSheets" id='infoSheets'>
                 
                     <p>10-12-2020</p>
                     <p>4 H</p>
@@ -54,5 +65,7 @@
     </div> 
 </body>
 
-<link rel="stylesheet" href="/account/styleAccount.css">
+<link rel="stylesheet" href="../account/null.css">
+<link rel="stylesheet" href="../account/styleAccount.css">
+<script src="./account.js"></script>
 </html>
