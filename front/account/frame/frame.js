@@ -1,8 +1,11 @@
 const url = 'http://127.0.0.1:5005/'
 let sessionData
 
+document.getElementById('sendInfoBut').addEventListener('click', async () => {
+    console.log('click')
+    await sendDataToCSV(sessionData, url)
+})
 
-auth()
 appendDataToInfoSheets()
 
 async function getInfoSheets(sessionData, url) {
@@ -62,13 +65,11 @@ async function appendDataToInfoSheets() {
 function auth() {
     sessionData = JSON.parse(sessionStorage.getItem('isLogin'))
 
-
+    document.getElementById('userName').innerHTML = sessionData.userName
 
     if (!sessionData) {
         window.location.href = '../index.html'
     }
-
-    document.getElementById('userName').innerHTML = sessionData.userName
 }
 
 async function sendDataToCSV(sessionData, url) {

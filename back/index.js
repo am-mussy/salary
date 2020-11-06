@@ -19,8 +19,6 @@ let csvinfoSheets = '../../infoSheets.csv'
 
 let log = true
 
-
-
 if (log) if (log) console.log(`IP: ${ip.address()}:5005`,)
 
 app.post('/', async function (req, res) {
@@ -43,7 +41,7 @@ app.post('/', async function (req, res) {
             <button class="delBut">-</button>`
         }
 
-        res.send(JSON.stringify(infoSheetsHTML))
+        res.send(JSON.stringify(info))
     }
 
     if (req.body.action === 'addInfoSheets') {
@@ -56,7 +54,7 @@ app.post('/', async function (req, res) {
             comment: req.body.comment
         }])
 
-        res.send('addInfoSheets')
+        res.send(JSON.stringify('addInfoSheets'))
     }
 
     if (req.body.action === 'add') {
