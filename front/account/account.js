@@ -1,7 +1,10 @@
 const url = 'http://127.0.0.1:5005/'
-let sessionData = JSON.parse(sessionStorage.getItem('isLogin'))
+let sessionData
 
+auth()
 appendDataToInfoSheets()
+
+
 
 
 
@@ -35,4 +38,13 @@ async function getInfoSheets(sessionData, url) {
 async function appendDataToInfoSheets() {
 
     document.getElementById('infoSheets').innerHTML = await getInfoSheets(sessionData, url)
+}
+
+
+function auth() {
+    sessionData = JSON.parse(sessionStorage.getItem('isLogin'))
+
+    if (!sessionData) {
+        window.location.href = '../index.html'
+    }
 }
