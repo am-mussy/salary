@@ -8,21 +8,23 @@
 <body>
     <div class="main">
         <div class="header">
-            <div class="userInfo">
-                <div class="userName">
-                    <p id="userName"></p>
-                </div>
-                <div class="userMoney">
-                    <p>300</p>
-                    <p class="moneyChar"> $</p>
-                </div>
+            <div class="user">
+                <div class="userInfo">
+                    <div class="userName">
+                        <p id="userName"></p>
+                    </div>
+                    <div class="userMoney">
+                        <p class="moneySum" id="moneySum"></p>
+                        <p class="moneyChar"> $</p>
+                    </div>       
+                </div>    
                 <div class="userPic">
                     <img src="../account/img/icon-avatar-16.jpg" alt="User Avatar">
                 </div>
-            </div>     
+            </div>  
         </div>
-        <iframe src="./frame/frameSheets.html" frameborder="0" class="frame"></iframe>
-            <!-- <div class="data">
+        
+            <div class="data">
                 <div class="filter"></div>
                 <div class="input"></div>
                 <div class="infoSheetsHeaders">
@@ -40,14 +42,15 @@
                     
                     
                 </div>
-            </div> -->
+            </div>
          
     </div> 
 </body>
 
-
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="../account/null.css">
 <link rel="stylesheet" href="../account/styleAccount.css">
 <script src="./account.js"></script>
+
 
 </html>
