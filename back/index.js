@@ -26,20 +26,18 @@ app.post('/', async function (req, res) {
     if (log) console.log('post: ПОЛУЧЕННЫЕ ДАННЫЕ \n', req.body)
     await createCSV() //Переделать под единичный запуск при старте сервера
 
+    if (req.body.action === 'delElemInfoSheets') {
+
+        await delElemInfoSheets(req.body.id)
+
+        res.send('H')
+    }
+
     if (req.body.action === 'getInfoSheets') {
 
         if (log) console.log('getInfoSheets')
 
         let info = await getDataForInfoSheets(req.body.userName)
-        let infoSheetsHTML = ''
-
-        for (let i = 0; i < info.length; i++) {
-            console.log(i, info[i])
-            infoSheetsHTML += `<p>${info[i].date}</p>
-            <p>${info[i].time}</p>
-            <p>${info[i].comment}</p>
-            <button class="delBut">-</button>`
-        }
 
         res.send(JSON.stringify(info))
     }
@@ -48,6 +46,7 @@ app.post('/', async function (req, res) {
 
         if (log) console.log('addInfoSheets')
         addDataForInfoSheets([{
+            id: new Date().getTime() + (Math.random() * 10000).toFixed(0),
             userName: req.body.userName,
             date: req.body.date,
             time: req.body.time,
@@ -110,7 +109,6 @@ app.post('/', async function (req, res) {
 app.listen(5005);
 
 
-
 async function addDataForInfoSheets(data) {
     await addInfoInCSV.writeRecords(data)
 }
@@ -127,6 +125,7 @@ async function getDataForInfoSheets(userName) {
                 if (data.userName === userName) {
 
                     DataForInfoSheets.push({
+                        id: data.id,
                         date: data.date,
                         time: data.time,
                         comment: data.comment
@@ -205,6 +204,7 @@ async function createCSV() {
         addInfoInCSV = createCsvWriter({
             path: csvinfoSheets,
             header: [
+                { id: 'id', title: 'id' },
                 { id: 'userName', title: 'userName' },
                 { id: 'date', title: 'date' },
                 { id: 'time', title: 'time' },
@@ -219,6 +219,7 @@ async function createCSV() {
         addInfoInCSV = createCsvWriter({
             path: csvinfoSheets,
             header: [
+                { id: 'id', title: 'id' },
                 { id: 'userName', title: 'userName' },
                 { id: 'date', title: 'date' },
                 { id: 'time', title: 'time' },
@@ -226,8 +227,38 @@ async function createCSV() {
             ]
         })
 
-        addInfoInCSV.writeRecords({ userName: '', date: '', time: '', comment: '' })
+        //addInfoInCSV.writeRecords({ userName: '', date: '', time: '', comment: '', id: '' })
     }
 
+
+}
+
+async function delElemInfoSheets(id) {
+
+    console.log('delELEM')
+    console.log(id)
+
+    fs.readFile(csvinfoSheets, 'utf8', function (err, data) {
+        if (err) {
+            console.error(err);
+        }
+
+        let _Data = data.split('\n')
+
+        console.log(_Data)
+        for (i = 0; i < _Data.length; i++) {
+
+            if (_Data[i].split(',')[0] === id) {
+
+                _Data.splice(i, 1)
+                break
+            }
+
+        }
+
+        console.log(_Data.join('\n'))
+
+        fs.writeFileSync(csvinfoSheets, _Data.join('\n'))
+    });
 
 }
