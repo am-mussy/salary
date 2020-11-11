@@ -13,20 +13,25 @@ window.onload = async () => {
     //Загружает данные с сервера в таблицу
     await PreparingDataForInfoSheets()
 
-    //При нажатии на кнопку "+" отправлет данные на сервер
+    //При нажатии на кнопку "+" отправлет данные на сервер          
     document.getElementById('sendInfoBut').addEventListener('click', async () => {
-        console.log('clocl')
-        await sendDataToCSV(sessionData, url)
-        //document.getElementById('infoSheets').innerHTML = ''
-        // $('#infoSheets').empty()
+
+        console.log('addDataToInfoSheets')
+
+        let id = new Date().getTime() + (Math.random() * 10000).toFixed(0)
+
+        await sendDataToCSV(sessionData, url, id)
+
+
         await appendDataToInfoSheets(0, [
             {
                 date: document.getElementById('date').value,
                 time: document.getElementById('time').value,
-                comment: document.getElementById('comment').value
+                comment: document.getElementById('comment').value,
+                id: id
             }
         ])
-        // $('#data').load(`${location.href} #infoSheets`)
+
         let sum = 0
 
         for (let i = 0; document.getElementsByClassName('time').length > i; i++) {
@@ -42,6 +47,11 @@ window.onload = async () => {
 
         document.getElementById('moneySum').innerHTML = onehourprice * sum
 
+        for (let i = 0; document.getElementsByClassName('delBut').length > i; i++) {
+
+            document.getElementsByClassName('delBut')[i].removeEventListener('click', removeElemFromInfoSheets)
+            document.getElementsByClassName('delBut')[i].addEventListener('click', removeElemFromInfoSheets)
+        }
     })
 
     //Добавляет(?) 
@@ -49,23 +59,12 @@ window.onload = async () => {
 
     for (let i = 0; document.getElementsByClassName('delBut').length > i; i++) {
 
-        console.log('loop')
-        document.getElementsByClassName('delBut')[0].addEventListener('click', async () => {
-
-            await delOfInfoSheets(document.getElementsByClassName('delBut')[0].classList[0])
-
-            let lineClass = document.getElementsByClassName(document.getElementsByClassName('delBut')[0].className.split(' ')[0])
-
-            for (let j = lineClass.length - 1; j >= 0; j--) {
-                lineClass[j].remove()
-            }
-
-
-
-        })
+        document.getElementsByClassName('delBut')[i].removeEventListener('click', removeElemFromInfoSheets)
+        document.getElementsByClassName('delBut')[i].addEventListener('click', removeElemFromInfoSheets)
     }
 
 }
+
 //Запрашивает данные таблицы с сервера
 async function getInfoSheets(sessionData, url) {
 
@@ -108,7 +107,7 @@ async function PreparingDataForInfoSheets() {
     document.getElementById('moneySum').innerHTML = userTimeSum * onehourprice
 }
 
-//Добавляет(рисует) данные в таблице
+//Добавляет(рисует) данные в таблице new Date().getTime() + (Math.random() * 10000).toFixed(0)
 async function appendDataToInfoSheets(i, info) {
 
     date = document.createElement('p')
@@ -148,7 +147,7 @@ function auth() {
 }
 
 //Отправляет новые данные на сервер
-async function sendDataToCSV(sessionData, url) {
+async function sendDataToCSV(sessionData, url, id) {
 
     console.log('sends...')
 
@@ -157,7 +156,8 @@ async function sendDataToCSV(sessionData, url) {
         userName: sessionData.userName,
         date: document.getElementById('date').value,
         time: document.getElementById('time').value,
-        comment: document.getElementById('comment').value
+        comment: document.getElementById('comment').value,
+        id: id
     }
 
     try {
@@ -178,6 +178,7 @@ async function sendDataToCSV(sessionData, url) {
 
 }
 
+//Отправляем id на удаление
 async function delOfInfoSheets(id) {
     console.log('sends...')
 
@@ -200,4 +201,16 @@ async function delOfInfoSheets(id) {
         console.error('Ошибка:', error);
     }
 
+}
+
+
+async function removeElemFromInfoSheets() {
+
+    await delOfInfoSheets(document.getElementsByClassName('delBut')[0].classList[0])
+
+    let lineClass = document.getElementsByClassName(document.getElementsByClassName('delBut')[0].className.split(' ')[0])
+
+    for (let j = lineClass.length - 1; j >= 0; j--) {
+        lineClass[j].remove()
+    }
 }

@@ -46,7 +46,7 @@ app.post('/', async function (req, res) {
 
         if (log) console.log('addInfoSheets')
         addDataForInfoSheets([{
-            id: new Date().getTime() + (Math.random() * 10000).toFixed(0),
+            id: req.body.id,
             userName: req.body.userName,
             date: req.body.date,
             time: req.body.time,
@@ -245,7 +245,7 @@ async function delElemInfoSheets(id) {
 
         let _Data = data.split('\n')
 
-        console.log(_Data)
+
         for (i = 0; i < _Data.length; i++) {
 
             if (_Data[i].split(',')[0] === id) {
@@ -256,7 +256,7 @@ async function delElemInfoSheets(id) {
 
         }
 
-        console.log(_Data.join('\n'))
+
 
         fs.writeFileSync(csvinfoSheets, _Data.join('\n'))
     });
