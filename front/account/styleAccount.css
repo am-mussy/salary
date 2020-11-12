@@ -1,34 +1,70 @@
 @font-face {
   font-family: "BloggerSans";
-  src: url('../font/BloggerSans.ttf') format("truetype");
+  src: url("../font/BloggerSans.ttf") format("truetype");
+  font-style: normal;
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "BloggerSans-Light";
+  src: url("../font/BloggerSans-Light.ttf") format("truetype");
+  font-style: normal;
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "BloggerSans-Bold";
+  src: url("../font/BloggerSans-Bold.ttf") format("truetype");
   font-style: normal;
   font-weight: normal;
 }
 
 body {
-
   color: white;
   font-size: 20px;
-  font-family: 'BloggerSans';
+  font-family: "BloggerSans";
 
-  background-image: url('./img/wp2088523-flat-design-wallpapers.jpg');
-
+  background-image: url("./img/wp2088523-flat-design-wallpapers.jpg");
 }
 
 .main {
-
   margin: auto;
 }
 
-.main .header {
+.main .notification {
+  position: absolute;
+}
 
+.main .alarm {
+  position: relative;
+  margin-left: 10px;
+  margin-top: 10px;
+  width: 300px;
+  height: auto;
+  max-height: 150px;
+  padding: 10px;
+  border: solid 1px rgb(210, 218, 226, 0.3);
+  border-radius: 25px;
+  background-color: rgb(54, 52, 66, 0.3);
+}
+
+.alarm h1 {
+  font-family: "BloggerSans";
+  font-size: 20px;
+}
+.alarm p {
+  margin-top: 5px;
+  font-family: "BloggerSans-Light";
+  font-size: 15px;
+}
+
+.main .header {
   height: 30%;
   width: 90%;
   padding: 10px 0 50px 0;
 }
 
 .main .user {
-
   width: 30%;
   height: 30%;
 
@@ -44,39 +80,32 @@ body {
 }
 
 .main .header .userPic {
-
   text-align: right;
 }
 
 .main .userInfo {
-
   text-transform: uppercase;
 }
 
 .main .userInfo .userName {
-
   text-align: right;
 }
 
 .main .header .userPic img {
-
   width: 80px;
   height: 80px;
   padding: 1%;
 }
 
 .main .header .userInfo .userMoney {
-
   text-align: right;
 }
 
 .main .header .userInfo .userMoney p {
-
   display: inline-block;
 }
 
 .main .data {
-
   border: solid 2px rgb(210, 218, 226, 0.5);
   border-radius: 25px;
   width: 80%;
@@ -86,38 +115,31 @@ body {
 }
 
 .main .data .infoSheetsHeaders {
-
   display: grid;
   grid-template-columns: 1fr 1fr 2fr 30px;
-
 
   margin: auto;
   text-align: center;
 }
 
 .main .data .input {
-
   text-align: center;
   display: grid;
   grid-template-columns: 1fr 1fr 2fr fit-content(30px);
   color: #d2dae2;
   padding-top: 10px;
   opacity: 0.3;
-
 }
 
 .main .data .input :hover {
-
   opacity: 0.9;
   transform: scale(1.1, 1.1);
 }
 
-
 .main .data input {
-
   text-align: center;
   margin: auto;
-  font-family: 'BloggerSans';
+  font-family: "BloggerSans";
 
   border-radius: 30px;
 
@@ -125,10 +147,7 @@ body {
   height: 30px;
 }
 
-
-
 .main .data .input button {
-
   width: 30px;
   height: 30px;
   font-size: 20px;
@@ -136,17 +155,13 @@ body {
 }
 
 .main .data .delBut {
-
   width: 30px;
   height: 30px;
   font-size: 20px;
   border-radius: 100%;
 }
 
-
-
 .main .data .infoSheets {
-
   display: grid;
   grid-template-columns: 1fr 1fr 2fr fit-content(30px);
 

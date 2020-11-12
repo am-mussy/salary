@@ -6,7 +6,8 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="main">
+    <div class="main" id="main">
+        <div class="notification" id="notification"></div>
         <div class="header">
             <div class="user">
                 <div class="userInfo">
@@ -32,12 +33,12 @@
                     <p>TIME</p>
                     <p>COMMENTS</p>
                 </div>
-                <div class="input">
-                    <input type="date" id="date">
-                    <input type="text" placeholder="time" id="time">
-                    <input type="text" placeholder="comment" id="comment">
+                <form class="input" onsubmit="return false">
+                    <input type="date" id="date" required>
+                    <input type="text" placeholder="time" id="time" required>
+                    <input type="text" placeholder="comment" id="comment" required>
                     <button id="sendInfoBut">+</button >
-                </div>
+                </form>
                 <div class="infoSheets" id='infoSheets'>
                     
                     

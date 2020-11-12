@@ -5,8 +5,13 @@ let sessionData
 let onehourprice = 10 //Стоимость часа
 let userTimeSum = 0 //Сколько часов всего отработал
 
-
 auth()
+
+let notification = {
+    show: alarm,
+    clearAll: clearAllNotification
+}
+
 
 window.onload = async () => {
 
@@ -17,40 +22,43 @@ window.onload = async () => {
     document.getElementById('sendInfoBut').addEventListener('click', async () => {
 
         console.log('addDataToInfoSheets')
+        if (document.getElementById('date').value && document.getElementById('time').value && document.getElementById('comment').value) {
 
-        let id = new Date().getTime() + (Math.random() * 10000).toFixed(0)
+            if (!isNaN(parseInt(document.getElementById('time').value))) {
+                let id = new Date().getTime() + (Math.random() * 10000).toFixed(0)
+                await sendDataToCSV(sessionData, url, id)
+                await appendDataToInfoSheets(0, [
+                    {
+                        date: document.getElementById('date').value,
+                        time: document.getElementById('time').value,
+                        comment: document.getElementById('comment').value,
+                        id: id
+                    }
+                ])
 
-        await sendDataToCSV(sessionData, url, id)
+                let sum = 0
+
+                for (let i = 0; document.getElementsByClassName('time').length > i; i++) {
 
 
-        await appendDataToInfoSheets(0, [
-            {
-                date: document.getElementById('date').value,
-                time: document.getElementById('time').value,
-                comment: document.getElementById('comment').value,
-                id: id
+                    sum += parseInt(document.getElementsByClassName('time')[i].innerHTML)
+                    console.log(sum)
+                }
+
+                console.log(parseInt(document.getElementById('moneySum').innerHTML))
+                console.log(sum)
+                console.log(onehourprice)
+
+                document.getElementById('moneySum').innerHTML = onehourprice * sum
+
+                for (let i = 0; document.getElementsByClassName('delBut').length > i; i++) {
+
+                    document.getElementsByClassName('delBut')[i].removeEventListener('click', removeElemFromInfoSheets)
+                    document.getElementsByClassName('delBut')[i].addEventListener('click', removeElemFromInfoSheets)
+                }
+            } else {
+                notification.show(document.getElementById('time').value, 'Is not a number')
             }
-        ])
-
-        let sum = 0
-
-        for (let i = 0; document.getElementsByClassName('time').length > i; i++) {
-
-
-            sum += parseInt(document.getElementsByClassName('time')[i].innerHTML)
-            console.log(sum)
-        }
-
-        console.log(parseInt(document.getElementById('moneySum').innerHTML))
-        console.log(sum)
-        console.log(onehourprice)
-
-        document.getElementById('moneySum').innerHTML = onehourprice * sum
-
-        for (let i = 0; document.getElementsByClassName('delBut').length > i; i++) {
-
-            document.getElementsByClassName('delBut')[i].removeEventListener('click', removeElemFromInfoSheets)
-            document.getElementsByClassName('delBut')[i].addEventListener('click', removeElemFromInfoSheets)
         }
     })
 
@@ -213,4 +221,27 @@ async function removeElemFromInfoSheets() {
     for (let j = lineClass.length - 1; j >= 0; j--) {
         lineClass[j].remove()
     }
+}
+
+function alarm(header, text) {
+
+    let id = (Math.random() * 10000).toFixed(0)
+
+    let alarm = document.createElement('div')
+    alarm.className = 'alarm ' + id
+    alarm.style.opacity = '1'
+    alarm.innerHTML = `
+    <h1>${header}</h1>   
+    <p>${text}</p>`
+    document.getElementById('notification').append(alarm)
+
+    setTimeout(() => {
+
+        document.getElementsByClassName(id)[0].remove()
+    }, 2000);
+
+}
+
+function clearAllNotification() {
+    document.getElementById('notification').innerHTML = ''
 }
