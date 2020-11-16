@@ -87,6 +87,18 @@ body {
   text-transform: uppercase;
 }
 
+.main .exitDIV {
+  margin-left: auto;
+  width: 30px;
+}
+
+.main button {
+  width: 20px;
+  height: 20px;
+  font-size: 15px;
+  border-radius: 100%;
+}
+
 .main .userInfo .userName {
   text-align: right;
 }
@@ -170,4 +182,44 @@ body {
   text-align: center;
 
   grid-gap: 20px;
+}
+
+.main .data .filter {
+  opacity: 0.7;
+  display: grid;
+
+  grid-template-columns: 30px 200px 30px 200px 30px;
+  justify-items: start;
+
+  border: solid 2px rgb(210, 218, 226, 0.5);
+  border-radius: 25px;
+
+  width: 500px;
+  height: 50px;
+
+  margin-bottom: 30px;
+  margin-left: 10px;
+}
+
+.main .data .filter :hover {
+  opacity: 0.9;
+}
+
+.main .data .filter p {
+  padding-left: 5px;
+  justify-items: start;
+  margin: auto;
+}
+
+.main .data .filter input {
+  justify-items: start;
+  margin: auto;
+}
+
+.main .data .filter button {
+  margin: auto;
+  width: 30px;
+  height: 30px;
+  font-size: 20px;
+  border-radius: 100%;
 }

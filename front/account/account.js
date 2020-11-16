@@ -1,12 +1,13 @@
 // (?) - не понятно будет ли работать, работает ли сейчас так как запланировано
 
+
 const url = 'http://127.0.0.1:5005/'
 let sessionData
 let onehourprice = 10 //Стоимость часа
 let userTimeSum = 0 //Сколько часов всего отработал
 
 auth()
-
+//метод нотификаций
 let notification = {
     show: alarm,
     clearAll: clearAllNotification
@@ -17,60 +18,19 @@ window.onload = async () => {
 
     //Загружает данные с сервера в таблицу
     await PreparingDataForInfoSheets()
+    //При нажатии на кнопку "+" проверяет и отправлет данные на сервер          
+    document.getElementById('sendInfoBut').addEventListener('click', inputProcessing)
+    //Обработка фильтра
+    document.getElementById('serch').addEventListener('click', filter)
 
-    //При нажатии на кнопку "+" отправлет данные на сервер          
-    document.getElementById('sendInfoBut').addEventListener('click', async () => {
-
-        console.log('addDataToInfoSheets')
-        if (document.getElementById('date').value && document.getElementById('time').value && document.getElementById('comment').value) {
-
-            if (!isNaN(parseInt(document.getElementById('time').value))) {
-                let id = new Date().getTime() + (Math.random() * 10000).toFixed(0)
-                await sendDataToCSV(sessionData, url, id)
-                await appendDataToInfoSheets(0, [
-                    {
-                        date: document.getElementById('date').value,
-                        time: document.getElementById('time').value,
-                        comment: document.getElementById('comment').value,
-                        id: id
-                    }
-                ])
-
-                let sum = 0
-
-                for (let i = 0; document.getElementsByClassName('time').length > i; i++) {
-
-
-                    sum += parseInt(document.getElementsByClassName('time')[i].innerHTML)
-                    console.log(sum)
-                }
-
-                console.log(parseInt(document.getElementById('moneySum').innerHTML))
-                console.log(sum)
-                console.log(onehourprice)
-
-                document.getElementById('moneySum').innerHTML = onehourprice * sum
-
-                for (let i = 0; document.getElementsByClassName('delBut').length > i; i++) {
-
-                    document.getElementsByClassName('delBut')[i].removeEventListener('click', removeElemFromInfoSheets)
-                    document.getElementsByClassName('delBut')[i].addEventListener('click', removeElemFromInfoSheets)
-                }
-            } else {
-                notification.show(document.getElementById('time').value, 'Is not a number')
-            }
-        }
-    })
-
-    //Добавляет(?) 
-
-
+    //после загрузки странцицы вешает обработчик всем кнопкапкам "удалить"
     for (let i = 0; document.getElementsByClassName('delBut').length > i; i++) {
 
         document.getElementsByClassName('delBut')[i].removeEventListener('click', removeElemFromInfoSheets)
         document.getElementsByClassName('delBut')[i].addEventListener('click', removeElemFromInfoSheets)
     }
 
+    document.getElementById('logout').addEventListener('click', logout)
 }
 
 //Запрашивает данные таблицы с сервера
@@ -154,6 +114,13 @@ function auth() {
     document.getElementById('userName').innerHTML = sessionData.userName
 }
 
+//Удаляет данные из sessionStorage и переадресовывает на старицу логина
+function logout() {
+
+    sessionStorage.removeItem('isLogin')
+    window.location.href = '../index.html'
+}
+
 //Отправляет новые данные на сервер
 async function sendDataToCSV(sessionData, url, id) {
 
@@ -211,7 +178,7 @@ async function delOfInfoSheets(id) {
 
 }
 
-
+//удаляет строку из таблицы
 async function removeElemFromInfoSheets() {
 
     await delOfInfoSheets(document.getElementsByClassName('delBut')[0].classList[0])
@@ -223,6 +190,7 @@ async function removeElemFromInfoSheets() {
     }
 }
 
+//Метод объекта notification
 function alarm(header, text) {
 
     let id = (Math.random() * 10000).toFixed(0)
@@ -238,10 +206,105 @@ function alarm(header, text) {
     setTimeout(() => {
 
         document.getElementsByClassName(id)[0].remove()
-    }, 2000);
+    }, 4000);
 
 }
 
 function clearAllNotification() {
     document.getElementById('notification').innerHTML = ''
+}
+
+
+async function filter() {
+
+    let DateStart = new Date(document.getElementById('dateStart').value)
+    let DateEnd = new Date(document.getElementById('dateEnd').value)
+
+    if (DateStart > DateEnd) {
+        notification.show('Warning', 'Date "from" is grate than date "to"')
+    }
+    let DateNow
+
+
+    let rawData = await getInfoSheets(sessionData, url)
+    document.getElementById('infoSheets').innerHTML = ''
+    document.getElementById('moneySum').innerHTML = ''
+    let userTimeSum = 0
+
+    rawData.sort(function (a, b) {
+        let dateA = new Date(a.date), dateB = new Date(b.date)
+
+        return dateA - dateB //сортировка по возрастающей дате
+    })
+
+
+    console.log(DateStart, DateEnd)
+
+    for (let i = 0; i < rawData.length; i++) {
+
+        DateNow = new Date(rawData[i].date)
+        console.log(DateNow)
+        if (DateNow >= DateStart && DateNow <= DateEnd) {
+
+            appendDataToInfoSheets(i, rawData)
+            userTimeSum += parseInt(rawData[i].time)
+        }
+
+    }
+
+    for (let i = 0; document.getElementsByClassName('delBut').length > i; i++) {
+
+        document.getElementsByClassName('delBut')[i].removeEventListener('click', removeElemFromInfoSheets)
+        document.getElementsByClassName('delBut')[i].addEventListener('click', removeElemFromInfoSheets)
+    }
+    document.getElementById('moneySum').innerHTML = userTimeSum * onehourprice
+}
+
+async function inputProcessing() {
+
+
+    console.log('addDataToInfoSheets')
+    if (document.getElementById('date').value && document.getElementById('time').value && document.getElementById('comment').value) {
+
+        if (!isNaN(parseInt(document.getElementById('time').value))) {
+            if (parseInt(document.getElementById('time').value) < 24 && parseInt(document.getElementById('time').value) >= 0) {
+                let id = new Date().getTime() + (Math.random() * 10000).toFixed(0)
+                await sendDataToCSV(sessionData, url, id)
+                await appendDataToInfoSheets(0, [
+                    {
+                        date: document.getElementById('date').value,
+                        time: document.getElementById('time').value,
+                        comment: document.getElementById('comment').value,
+                        id: id
+                    }
+                ])
+
+                let sum = 0
+
+                for (let i = 0; document.getElementsByClassName('time').length > i; i++) {
+
+
+                    sum += parseInt(document.getElementsByClassName('time')[i].innerHTML)
+                    console.log(sum)
+                }
+
+                console.log(parseInt(document.getElementById('moneySum').innerHTML))
+                console.log(sum)
+                console.log(onehourprice)
+
+                document.getElementById('moneySum').innerHTML = onehourprice * sum
+
+                for (let i = 0; document.getElementsByClassName('delBut').length > i; i++) {
+
+                    document.getElementsByClassName('delBut')[i].removeEventListener('click', removeElemFromInfoSheets)
+                    document.getElementsByClassName('delBut')[i].addEventListener('click', removeElemFromInfoSheets)
+                }
+            } else {
+                notification.show('Time', `The value(${document.getElementById('time').value}) is invalid`)
+            }
+        } else {
+            notification.show(document.getElementById('time').value, 'Is not a number')
+        }
+    }
+
 }

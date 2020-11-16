@@ -7,6 +7,9 @@
 </head>
 <body>
     <div class="main" id="main">
+        <div class="exitDIV">
+            <button id='logout' class="exit">X</button>
+        </div>    
         <div class="notification" id="notification"></div>
         <div class="header">
             <div class="user">
@@ -17,7 +20,8 @@
                     <div class="userMoney">
                         <p class="moneySum" id="moneySum"></p>
                         <p class="moneyChar"> $</p>
-                    </div>       
+                    </div> 
+                      
                 </div>    
                 <div class="userPic">
                     <img src="../account/img/icon-avatar-16.jpg" alt="User Avatar">
@@ -26,7 +30,13 @@
         </div>
         
             <div class="data">
-                <div class="filter"></div>
+                <div class="filter">
+                    <p>From</p>
+                    <input type="date" id="dateStart" required>
+                    <p>to</p>
+                    <input type="date" id="dateEnd" required>
+                    <button id="serch">=</button >
+                </div>
                 <div class="input"></div>
                 <div class="infoSheetsHeaders">
                     <p>DATE</p>

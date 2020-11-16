@@ -6,20 +6,22 @@
     <title>Document</title>
 </head>
 <body>
-    <img src="/front/account/img/icon-avatar-16.jpg" alt="" srcset="" style="z-index: 1;"> 
-    <img src="/front/account/img/wp2088523-flat-design-wallpapers.jpg" alt="" srcset="" style="z-index: 2;">
+    
 </body>
 
 <script>
-    let inputVal = parseInt(document.getElementById('input').value) 
-    setInterval(() => {
+    let hour = prompt('Введите час:')
+    console.log(parseInt(hour))
 
-        while(true){console.log(sd)}
+    if( !isNaN(parseInt(hour)) && parseInt(hour) >= 0 && parseInt(hour) <= 24){
+        if(hour >= 10 && hour <= 20){
+            window.alert('Мы работаем')
+        } else {
+            window.alert('Мы закрыты')
+        }
+    } else {
+        window.alert('Попробуйте еще раз, вы веели недопустимое значение')
+    }
 
-        inputVal++ //?
-        document.getElementById('input').value = inputVal
-    }, 5000);
-
-    inputVal //?
 </script>
 </html>
