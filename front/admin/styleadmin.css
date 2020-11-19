@@ -149,3 +149,7 @@ body {
 .exitDIV button {
   display: inline;
 }
+
+.admin-p {
+  cursor: pointer;
+}

@@ -52,9 +52,20 @@ app.post('/', async function (req, res) {
 
     if (req.body.action === 'getInfoSheets') {
 
-        if (log) console.log('getInfoSheets')
 
-        let info = await getDataForInfoSheets(req.body.userName)
+        console.log('getInfoSheets')
+        let info
+
+        try {
+            if (req.body.AdminReq != undefined) {
+                console.log('Admin Req')
+                info = await getDataForInfoSheets(req.body.AdminReq)
+            } else {
+                info = await getDataForInfoSheets(req.body.userName)
+            }
+        } catch (error) {
+            console.log(error)
+        }
 
         res.send(JSON.stringify(info))
     }

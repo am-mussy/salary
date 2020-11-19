@@ -40,9 +40,11 @@ async function getInfoSheets(sessionData, url) {
 
     let body = {
         action: "getInfoSheets",
-        userName: sessionData.userName
+        userName: sessionData.userName,
+        adminReq: sessionData.adminReq
     }
 
+    console.log({ body })
     try {
         response = await fetch(url, {
             method: 'POST',
@@ -106,12 +108,18 @@ async function appendDataToInfoSheets(i, info) {
 //Авторизация - вернует на странцу ввода логина, если в sessionData - его не будет
 function auth() {
     sessionData = JSON.parse(sessionStorage.getItem('isLogin'))
+    console.log({ sessionData })
 
-    if (!sessionData) {
+    if (!sessionData || !sessionData.userName) {
         window.location.href = '../index.html'
     }
 
-    document.getElementById('userName').innerHTML = sessionData.userName
+    if (sessionData.adminReq != undefined) {
+        document.getElementById('userName').innerHTML = sessionData.adminReq
+    } else {
+        document.getElementById('userName').innerHTML = sessionData.userName
+    }
+
 }
 
 //Удаляет данные из sessionStorage и переадресовывает на старицу логина

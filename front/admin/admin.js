@@ -26,21 +26,53 @@ window.onload = async () => {
     //после загрузки странцицы вешает обработчик всем кнопкапкам "удалить"
     for (let i = 0; document.getElementsByClassName('delBut').length > i; i++) {
 
-        document.getElementsByClassName('delBut')[i].removeEventListener('click', removeElemFromInfoSheets)
         document.getElementsByClassName('delBut')[i].addEventListener('click', removeElemFromInfoSheets)
+
+        if (document.getElementsByClassName('roles')[i].innerText === 'User') {
+            document.getElementsByClassName(document.getElementsByClassName('roles')[i].classList[0])[0].addEventListener('click', () => { userStat(document.getElementsByClassName(document.getElementsByClassName('roles')[i].classList[0])[0].innerText) })
+            document.getElementsByClassName(document.getElementsByClassName('roles')[i].classList[0])[0].classList.add('admin-p')
+        }
     }
 
     document.getElementById('logout').addEventListener('click', logout)
 }
 
 
+function userStat(userName) {
+
+    console.log(userName)
+
+    let oldSessionData = JSON.parse(sessionStorage.getItem('isLogin'))
+
+    let sessionData = {
+        'userName': userName,
+        'access': oldSessionData.access,
+        'adminName': oldSessionData.userName
+    }
+
+    console.log(sessionData)
+    sessionStorage.setItem('isLogin', JSON.stringify(sessionData))
+
+    window.location.href = '../account/account.html'
+}
+
 //Авторизация - вернует на странцу ввода логина, если в sessionData - его не будет
 function auth() {
     sessionData = JSON.parse(sessionStorage.getItem('isLogin'))
 
-    if (!sessionData) {
+    if (!sessionData || sessionData.access != 'Admin') {
         window.location.href = '../index.html'
     }
+
+    let oldSessionData = JSON.parse(sessionStorage.getItem('isLogin'))
+
+    sessionData = {
+        'userName': oldSessionData.adminReq,
+        'access': oldSessionData.access,
+        'adminName': ""
+    }
+
+    sessionStorage.setItem('isLogin', JSON.stringify(sessionData))
 
     document.getElementById('userName').innerHTML = sessionData.userName
 }
@@ -239,6 +271,8 @@ async function inputProcessing() {
 
                 document.getElementsByClassName('delBut')[i].removeEventListener('click', removeElemFromInfoSheets)
                 document.getElementsByClassName('delBut')[i].addEventListener('click', removeElemFromInfoSheets)
+                document.getElementsByClassName(document.getElementsByClassName('roles')[i].classList[0])[0].addEventListener('click', () => { userStat(document.getElementsByClassName(document.getElementsByClassName('roles')[i].classList[0])[0].innerText) })
+
             }
 
         }
