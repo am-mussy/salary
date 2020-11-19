@@ -3,6 +3,7 @@ let userName
 let userAccess
 
 const accountURL = './account/account.html'
+const adminURL = './admin/admin.html'
 
 document.getElementById('okBut').addEventListener('click', async () => { await auth(url) })
 
@@ -61,9 +62,14 @@ async function routing() {
 
     console.log(sessionData)
 
-    if (sessionData.access === 'admin') {
+    if (sessionData.access === 'Admin') {
         console.log('routing... to ', accountURL)
-        window.location.href = accountURL
+        window.location.href = adminURL
+    }
+
+    if (sessionData.access === 'User') {
+        console.log('routing... to ', accountURL)
+        window.location.href = userURL
     }
 }
 

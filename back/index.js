@@ -24,7 +24,24 @@ if (log) if (log) console.log(`IP: ${ip.address()}:5005`,)
 app.post('/', async function (req, res) {
     if (log) console.log('-----------------------------------')
     if (log) console.log('post: ПОЛУЧЕННЫЕ ДАННЫЕ \n', req.body)
+
     await createCSV() //Переделать под единичный запуск при старте сервера
+
+    if (req.body.action === 'changUserAccess') {
+        await changUserAccess(req.body)
+        res.send('changed')
+    }
+
+    if (req.body.action === 'delUser') {
+        delUser(req.body.userName)
+        res.send('ok')
+    }
+
+    if (req.body.action === 'getUserList') {
+        res.send(JSON.stringify(await getUserList()))
+
+
+    }
 
     if (req.body.action === 'delElemInfoSheets') {
 
@@ -56,46 +73,14 @@ app.post('/', async function (req, res) {
         res.send(JSON.stringify('addInfoSheets'))
     }
 
-    if (req.body.action === 'add') {
+    if (req.body.action === 'addUser') {
 
-        if (fs.existsSync(csvUsers)) {
-
-            let user
-            user = await findUser(req.body.userName)
-            console.log(user)
-            if (log) console.log('find', { user })
-
-            if (!user.isFind) {
-
-
-                await addUserInCSV.writeRecords([{
-                    userName: req.body.userName,
-                    email: req.body.email,
-                    role: req.body.role
-                }])
-
-                res.send('add')
-
-            } else {
-                if (log) console.log('post ТАКОЙ ПОЛЬЗОВАТЕЛЬ УЖЕ ЕСТЬ')
-
-                res.send('FUCK U')
-            }
-
-        } else {
-
-            await addUserInCSV.writeRecords([{
-                userName: req.body.userName,
-                email: req.body.email,
-                role: req.body.role
-            }])
-
-            res.send('add')
-        }
+        addUser(req.body)
+        res.send('add')
     }
 
     if (req.body.action === 'find') {
-        //if(log) console.log(JSON.stringify(await findUser(csvUsers, req.body.userName)))
+
         res.send(JSON.stringify(await findUser(req.body.userName)))
     } else {
         //Переделать на нормальный ответ сервера
@@ -142,13 +127,18 @@ async function getDataForInfoSheets(userName) {
 
 async function findUser(userName) {
 
-    let userRes
+    console.log('findUser', userName)
+
+    let userRes = {
+        isFind: false
+    }
 
     return new Promise((resolve, reject) => {
         fs.createReadStream(csvUsers)
             .pipe(csv())
             .on('data', (data) => {
-                if (log) console.log(data)
+
+                console.log('findUser(data): ', data)
 
                 if (data.userName === userName) {
 
@@ -160,16 +150,60 @@ async function findUser(userName) {
 
                     resolve(userRes)
                 } else {
-                    userRes = {
-                        isFind: false
-                    }
 
-                    if (log) console.log('findUser: Пользователя нет в системе')
+                    console.log('findUser: Пользователя нет в системе')
                 }
 
             })
             .on('end', () => resolve(userRes))
     })
+
+}
+
+async function getUserList() {
+
+    let userRes = []
+
+    return new Promise((resolve, reject) => {
+        fs.createReadStream(csvUsers)
+            .pipe(csv())
+            .on('data', (data) => {
+
+                userRes.push(data)
+            })
+            .on('end', () => resolve(userRes))
+    })
+}
+
+async function delUser(userName) {
+
+    console.log('delUser:', userName)
+
+    let user
+
+    let streem = fs.readFile(csvUsers, 'utf8', function (err, data) {
+
+        let _Data = data.split('\n')
+
+
+        if (err) {
+            console.error(err);
+        }
+
+        for (i = 0; i < _Data.length; i++) {
+
+            if (_Data[i].split(',')[0] === userName) {
+
+                user = _Data[i]
+                _Data.splice(i, 1)
+                break
+            }
+
+        }
+
+        fs.writeFileSync(csvUsers, _Data.join('\n'))
+        return user
+    });
 
 }
 
@@ -261,4 +295,58 @@ async function delElemInfoSheets(id) {
         fs.writeFileSync(csvinfoSheets, _Data.join('\n'))
     });
 
+}
+
+
+async function changUserAccess(body) {
+
+    console.log('changUserAccess :', body)
+
+    await delUser(body.userName)
+
+    setTimeout(async () => {
+
+        await addUser(body)
+    }, 50);
+
+}
+
+async function addUser(body) {
+
+    console.log('addUser: ', body)
+
+
+    if (fs.existsSync(csvUsers)) {
+
+        let user
+        user = await findUser(body.userName)
+        console.log(user)
+
+        console.log('addUser', { user })
+        console.log('addUser', user.isFind)
+
+        if (!user.isFind) {
+
+
+            await addUserInCSV.writeRecords([{
+                userName: body.userName,
+                email: body.email,
+                role: body.role
+            }])
+
+            console.log('addUser: User added')
+
+        } else {
+
+            if (log) console.log('post ТАКОЙ ПОЛЬЗОВАТЕЛЬ УЖЕ ЕСТЬ')
+        }
+
+    } else {
+
+        await addUserInCSV.writeRecords([{
+            userName: body.userName,
+            email: body.email,
+            role: body.role
+        }])
+    }
 }

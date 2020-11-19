@@ -1,0 +1,151 @@
+@font-face {
+  font-family: "BloggerSans";
+  src: url("../font/BloggerSans.ttf") format("truetype");
+  font-style: normal;
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "BloggerSans-Light";
+  src: url("../font/BloggerSans-Light.ttf") format("truetype");
+  font-style: normal;
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "BloggerSans-Bold";
+  src: url("../font/BloggerSans-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: normal;
+}
+
+body {
+  color: white;
+  font-size: 20px;
+  font-family: "BloggerSans";
+
+  background-image: url("./img/wp2088523-flat-design-wallpapers.jpg");
+}
+
+.main {
+  margin: auto;
+}
+
+.main .notification {
+  position: absolute;
+}
+
+.main .alarm {
+  position: relative;
+  margin-left: 10px;
+  margin-top: 10px;
+  width: 300px;
+  height: auto;
+  max-height: 150px;
+  padding: 10px;
+  border: solid 1px rgb(210, 218, 226, 0.3);
+  border-radius: 25px;
+  background-color: rgb(54, 52, 66, 0.3);
+}
+
+.alarm h1 {
+  font-family: "BloggerSans";
+  font-size: 20px;
+}
+
+.alarm p {
+  margin-top: 5px;
+  font-family: "BloggerSans-Light";
+  font-size: 15px;
+}
+
+.main button {
+  width: 20px;
+  height: 20px;
+  font-size: 15px;
+  border-radius: 100%;
+}
+
+.main .data {
+  border: solid 2px rgb(210, 218, 226, 0.5);
+  border-radius: 25px;
+  width: 80%;
+  margin: auto;
+  padding: 15px 20px 15px 5px;
+  text-align: center;
+}
+
+.main .data .infoSheetsHeaders {
+  display: grid;
+  grid-template-columns: 1fr 1fr 30px;
+  margin: auto;
+  text-align: center;
+}
+
+.main .data .input {
+  text-align: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr fit-content(30px);
+  color: #d2dae2;
+  padding-top: 10px;
+  opacity: 0.3;
+}
+
+.main .data .input .select {
+  text-align: center;
+  margin: auto;
+  font-family: "BloggerSans";
+  border-radius: 30px;
+  width: 150px;
+  height: 30px;
+}
+
+.main .data .input :hover {
+  opacity: 0.9;
+  transform: scale(1.1, 1.1);
+}
+
+.main .data input {
+  text-align: center;
+  margin: auto;
+  font-family: "BloggerSans";
+
+  border-radius: 30px;
+
+  width: 150px;
+  height: 30px;
+}
+
+.main .data .input button {
+  width: 30px;
+  height: 30px;
+  font-size: 20px;
+  border-radius: 100%;
+}
+
+.main .data .delBut {
+  width: 30px;
+  height: 30px;
+  font-size: 20px;
+  border-radius: 100%;
+}
+
+.main .data .infoSheets {
+  display: grid;
+  grid-template-columns: 1fr 1fr fit-content(30px);
+
+  padding-top: 20px;
+  margin: auto;
+  text-align: center;
+
+  grid-gap: 20px;
+}
+
+.exitDIV {
+  text-align: right;
+  margin: 25px 25px 0px 0px;
+}
+
+.exitDIV button {
+  display: inline;
+}
