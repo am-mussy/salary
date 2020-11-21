@@ -5,10 +5,21 @@ let userAccess
 const accountURL = './account/account.html'
 const adminURL = './admin/admin.html'
 
-document.getElementById('okBut').addEventListener('click', async () => { await auth(url) })
+document.getElementById('okBut').addEventListener('click', async () => {
+    await auth(url)
+    await routing()
+})
+
+document.addEventListener('keydown', async () => {
+    if (event.keyCode === 13) {
+        await auth(url)
+        await routing()
+    }
+})
 
 
-routing()
+
+
 
 async function auth(url) {
 
